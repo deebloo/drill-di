@@ -34,6 +34,7 @@ export class Injector {
    * @param provider A provider to create an instance of
    */
   get<T>(provider: Provider<T>): T {
+    // if provider has already been created return it
     if (this.providerMap.has(provider)) {
       return this.providerMap.get(provider);
     }
