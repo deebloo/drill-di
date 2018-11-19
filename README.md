@@ -6,8 +6,6 @@ super small DI implementation
 ```TS
 import { Injector } from 'drill';
 
-const app = new Injector();
-
 class FooService {
   sayHello() {
     return 'Hello From FooService'; 
@@ -23,6 +21,8 @@ class BarService {
     return 'Hello From BarService and ' + this.foo.sayHello();
   }
 }
+
+const app = new Injector();
 
 app.get(BarService).sayHello(); // Hello from BarService and Hello from FooService
 ```
