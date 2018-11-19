@@ -9,7 +9,8 @@
   },
   "description": "small DI implementation",
   "scripts": {
-    "test": "jest",
+    "test": "jest --watchAll",
+    "test:ci": "jest",
     "build": "ng-packagr -p package.json"
   },
   "repository": {
