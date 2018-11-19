@@ -19,7 +19,7 @@ class BarService {
   
   constructor(private foo: FooService) {}
   
-  sayHell() {
+  sayHello() {
     return 'Hello From BarService and ' + this.foo.sayHello();
   }
 }
