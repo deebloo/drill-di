@@ -60,7 +60,7 @@ export class Injector {
     const creator = overrideProvider || provider;
 
     if (creator.deps) {
-      const deps = creator.deps.map(dep => this.get(dep));
+      const deps = creator.deps.map(dep => this.create(dep));
 
       return creator.factory ? creator.factory(...deps) : new provider(...deps);
     }
