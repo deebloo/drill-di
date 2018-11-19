@@ -8,21 +8,19 @@
     }
   },
   "description": "small DI implementation",
-  "main": "index.js",
   "scripts": {
     "test": "jest",
     "build": "ng-packagr -p package.json"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/azu/parcel-typescript-example.git"
+    "url": "git+https://github.com/deebloo/drill.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/azu/parcel-typescript-example/issues"
+    "url": "https://github.com/deebloo/drill/issues"
   },
-  "homepage": "https://github.com/azu/parcel-typescript-example#readme",
   "devDependencies": {
     "@angular/compiler": "^7.0.4",
     "@angular/compiler-cli": "^7.0.4",
