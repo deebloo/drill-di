@@ -140,3 +140,17 @@ test('it should use the provided factory method if it exists', () => {
 
   expect(app.get<any>(FooService) as string).toBe('Hello World');
 });
+
+test('it should return the same instance when called', () => {
+  class BarService {}
+
+  class FooService {
+    static deps = [BarService];
+
+    constructor(public bar: BarService) {}
+  }
+
+  const app = new Injector();
+
+  expect(app.get(FooService).bar).toBe(app.get(BarService));
+});

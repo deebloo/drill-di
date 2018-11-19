@@ -38,33 +38,26 @@ export class Injector {
       return this.providerMap.get(provider);
     }
 
-    const instance = this.create(provider);
-
-    this.providerMap.set(provider, instance);
-
-    return instance;
-  }
-
-  /**
-   * Creates a new instance of a provider.
-   *
-   * NOTE: in most cases you will want to use Injector.get instead
-   *
-   * @param provider A provider to create an instance of
-   */
-  create<T>(provider: Provider<T>): T {
     const overrideProvider = this.opts.overrides
       ? this.opts.overrides.find(override => override.provide === provider)
       : null;
 
     const creator = overrideProvider || provider;
 
+    let instance: T;
+
     if (creator.deps) {
       const deps = creator.deps.map(dep => this.get(dep));
 
-      return creator.factory ? creator.factory(...deps) : new provider(...deps);
+      instance = creator.factory
+        ? creator.factory(...deps)
+        : new provider(...deps);
+    } else {
+      instance = creator.factory ? creator.factory() : new provider();
     }
 
-    return creator.factory ? creator.factory() : new provider();
+    this.providerMap.set(provider, instance);
+
+    return instance;
   }
 }
