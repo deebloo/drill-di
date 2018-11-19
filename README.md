@@ -22,7 +22,16 @@ class BarService {
   }
 }
 
+class BazService {
+  static deps = [BarService];
+  static factory(bar: BarService) {
+    return new BazService(bar, window['isDebugMode'])
+  }
+  
+  constructor(public bar: BarService, public isDebugMode: boolean) {}
+}
+
 const app = new Injector();
 
-app.get(BarService).sayHello(); // Hello from BarService and Hello from FooService
+app.get(BazService).bar.sayHello(); // Hello from BarService and Hello from FooService
 ```
