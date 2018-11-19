@@ -1,0 +1,38 @@
+{
+  "$schema": "./node_modules/ng-packagr/package.schema.json",
+  "name": "injector",
+  "version": "1.0.0",
+  "ngPackage": {
+    "lib": {
+      "entryFile": "src/public_api.ts"
+    }
+  },
+  "description": "small DI implementation",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "build": "ng-packagr -p package.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/azu/parcel-typescript-example.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/azu/parcel-typescript-example/issues"
+  },
+  "homepage": "https://github.com/azu/parcel-typescript-example#readme",
+  "devDependencies": {
+    "@angular/compiler": "^7.0.4",
+    "@angular/compiler-cli": "^7.0.4",
+    "@angular/core": "^7.0.4",
+    "@types/jest": "^23.3.9",
+    "jest": "^23.6.0",
+    "ng-packagr": "^4.4.0",
+    "prettier": "^1.15.2",
+    "ts-jest": "^23.10.4",
+    "tsickle": "^0.34.0",
+    "typescript": "^3.1.6"
+  }
+}
