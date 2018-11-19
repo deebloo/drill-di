@@ -54,9 +54,7 @@ export class Injector {
    */
   create<T>(provider: Provider<T>): T {
     const overrideProvider = this.opts.overrides
-      ? this.opts.overrides.find(override => {
-          return override.provide === provider;
-        })
+      ? this.opts.overrides.find(override => override.provide === provider)
       : null;
 
     const creator = overrideProvider || provider;
