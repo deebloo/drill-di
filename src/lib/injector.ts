@@ -38,7 +38,8 @@ export class Injector {
     if (this.providerMap.has(provider)) {
       return this.providerMap.get(provider);
     }
-
+    
+    // Check if there is an override defined in the Injector instance
     const overrideProvider = this.opts.overrides
       ? this.opts.overrides.find(override => override.provide === provider)
       : null;
@@ -46,7 +47,8 @@ export class Injector {
     const creator = overrideProvider || provider;
 
     let instance: T;
-
+    
+    // if there are dependencies recursively call Injector.get
     if (creator.deps) {
       const deps = creator.deps.map(dep => this.get(dep));
 
@@ -56,7 +58,8 @@ export class Injector {
     } else {
       instance = creator.factory ? creator.factory() : new provider();
     }
-
+    
+    // cache the result in the WeapMap
     this.providerMap.set(provider, instance);
 
     return instance;
