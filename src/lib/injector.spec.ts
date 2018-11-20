@@ -99,7 +99,10 @@ test('it should override a provider if explicitly instructed', () => {
 
   const app = new Injector({
     overrides: [
-      { provide: BarService, factory: () => ({ foo: 'Goodbye World' }) }
+      {
+        provide: BarService,
+        factory: () => ({ foo: 'Goodbye World' } as BarService)
+      }
     ]
   });
 
@@ -153,4 +156,18 @@ test('it should return the same instance when called', () => {
   const app = new Injector();
 
   expect(app.get(FooService).bar).toBe(app.get(BarService));
+});
+
+test('it should return different instances', () => {
+  class BarService {}
+
+  class FooService {
+    static deps = [BarService];
+
+    constructor(public bar: BarService) {}
+  }
+
+  expect(new Injector().get(FooService).bar).not.toBe(
+    new Injector().get(BarService)
+  );
 });
