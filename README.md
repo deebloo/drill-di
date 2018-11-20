@@ -25,7 +25,7 @@ class BarService {
   }
 }
 
-// An option "factory" function can be defined and will be called when created
+// An optional "factory" function can be defined and will be called when created
 class BazService {
   static deps = [BarService];
   static factory(bar: BarService) {
