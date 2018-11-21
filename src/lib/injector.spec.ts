@@ -97,18 +97,22 @@ test('it should override a provider if explicitly instructed', () => {
     }
   }
 
-  const app = new Injector({
-    provide: [
-      {
-        provide: BarService,
-        provider: class implements BarService {
-          foo = 'Goodbye World';
-        }
-      }
-    ]
-  });
+  expect(new Injector().get(FooService).sayHello()).toBe('Hello World');
 
-  expect(app.get(FooService).sayHello()).toBe('Goodbye World');
+  expect(
+    new Injector({
+      provide: [
+        {
+          provide: BarService,
+          provider: class implements BarService {
+            foo = 'Goodbye World';
+          }
+        }
+      ]
+    })
+      .get(FooService)
+      .sayHello()
+  ).toBe('Goodbye World');
 });
 
 test('it immediately initialize specified providers', () => {
