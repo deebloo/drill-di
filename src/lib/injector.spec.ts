@@ -101,7 +101,7 @@ test('it should override a provider if explicitly instructed', () => {
 
   expect(
     new Injector({
-      provide: [
+      providers: [
         {
           provide: BarService,
           provider: class implements BarService {

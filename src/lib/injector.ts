@@ -11,7 +11,7 @@ export interface OverrideProvider<T> {
 }
 
 export interface InjectorOptions {
-  provide?: OverrideProvider<any>[];
+  providers?: OverrideProvider<any>[];
   bootstrap?: Provider<any>[];
 }
 
@@ -39,8 +39,8 @@ export class Injector {
     }
 
     // Check if there is an override defined in the Injector instance
-    const override = this.opts.provide
-      ? this.opts.provide.find(override => override.provide === provider)
+    const override = this.opts.providers
+      ? this.opts.providers.find(override => override.provide === provider)
       : null;
 
     const creator = override ? override.provider : provider;
