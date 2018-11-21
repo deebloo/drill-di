@@ -98,10 +98,12 @@ test('it should override a provider if explicitly instructed', () => {
   }
 
   const app = new Injector({
-    overrides: [
+    provide: [
       {
         provide: BarService,
-        factory: () => ({ foo: 'Goodbye World' } as BarService)
+        provider: class implements BarService {
+          foo = 'Goodbye World';
+        }
       }
     ]
   });
@@ -130,18 +132,6 @@ test('it immediately initialize specified providers', () => {
 
   expect(app.get(FooService).initialized).toBe(true);
   expect(app.get(BarService).initialized).toBe(true);
-});
-
-test('it should use the provided factory method if it exists', () => {
-  class FooService {
-    static factory() {
-      return 'Hello World';
-    }
-  }
-
-  const app = new Injector();
-
-  expect(app.get<any>(FooService) as string).toBe('Hello World');
 });
 
 test('it should return the same instance when called', () => {

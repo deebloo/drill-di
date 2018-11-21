@@ -5,14 +5,13 @@ export interface Provider<T> {
   new (...args: any[]): T;
 }
 
-export interface OverrideProvider {
-  provide: Provider<any>;
-  factory(...args: any[]): any;
-  deps?: Provider<any>[];
+export interface OverrideProvider<T> {
+  provide: Provider<T>;
+  provider: Provider<T>;
 }
 
 export interface InjectorOptions {
-  overrides?: OverrideProvider[];
+  provide?: OverrideProvider<any>[];
   bootstrap?: Provider<any>[];
 }
 
@@ -40,24 +39,15 @@ export class Injector {
     }
 
     // Check if there is an override defined in the Injector instance
-    const overrideProvider = this.opts.overrides
-      ? this.opts.overrides.find(override => override.provide === provider)
+    const override = this.opts.provide
+      ? this.opts.provide.find(override => override.provide === provider)
       : null;
 
-    const creator = overrideProvider || provider;
+    const creator = override ? override.provider : provider;
 
-    let instance: T;
-
-    // if there are dependencies recursively call Injector.get
-    if (creator.deps) {
-      const deps = creator.deps.map(dep => this.get(dep));
-
-      instance = creator.factory
-        ? creator.factory(...deps)
-        : new provider(...deps);
-    } else {
-      instance = creator.factory ? creator.factory() : new provider();
-    }
+    const instance = creator.deps
+      ? new creator(...creator.deps.map(dep => this.get(dep)))
+      : new creator();
 
     // cache the result in the WeakMap
     this.providerMap.set(provider, instance);
