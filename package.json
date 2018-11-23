@@ -33,5 +33,8 @@
     "ts-jest": "^23.10.4",
     "tsickle": "^0.34.0",
     "typescript": "^3.1.6"
+  },
+  "dependencies": {
+    "rxjs": "^6.3.3"
   }
 }

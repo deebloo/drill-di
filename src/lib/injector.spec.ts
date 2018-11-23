@@ -1,4 +1,4 @@
-import { Injector } from './injector';
+import { Injector, Provider } from './injector';
 
 test('it should create a new instance of a single provider', () => {
   class MyService {
@@ -116,26 +116,23 @@ test('it should override a provider if explicitly instructed', () => {
 });
 
 test('it immediately initialize specified providers', () => {
-  class BarService {
-    initialized = false;
+  const initialized: Provider<any>[] = [];
 
+  class BarService {
     constructor() {
-      this.initialized = true;
+      initialized.push(BarService);
     }
   }
 
   class FooService {
-    initialized = false;
-
     constructor() {
-      this.initialized = true;
+      initialized.push(FooService);
     }
   }
 
-  const app = new Injector({ bootstrap: [FooService, BarService] });
+  new Injector({ bootstrap: [FooService, BarService] });
 
-  expect(app.get(FooService).initialized).toBe(true);
-  expect(app.get(BarService).initialized).toBe(true);
+  expect(initialized).toEqual([FooService, BarService]);
 });
 
 test('it should return the same instance when called', () => {
