@@ -1,4 +1,4 @@
-# drill-di [![CircleCI](https://circleci.com/gh/deebloo/drill.svg?style=svg)](https://circleci.com/gh/deebloo/drill)
+# drill-di [![CircleCI](https://circleci.com/gh/deebloo/drill-di.svg?style=svg)](https://circleci.com/gh/deebloo/drill-di)
 
 super small DI implementation
 
