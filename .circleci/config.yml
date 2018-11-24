@@ -49,7 +49,7 @@ jobs:
           paths:
             - node_modules
           key: v1s-dependencies-{{ checksum "package.json" }}
-          
+
       - run: npm run test:ci
 
 workflows:
@@ -58,8 +58,4 @@ workflows:
     jobs:
       - install_deps
       - build
-          requires:
-            - install_deps
       - test
-          requires:
-            - install_deps
