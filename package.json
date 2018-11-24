@@ -25,6 +25,7 @@
   "devDependencies": {
     "@angular/compiler": "^7.0.4",
     "@angular/compiler-cli": "^7.0.4",
+    "@angular/core": "^7.1.0",
     "@types/jest": "^23.3.9",
     "jest": "^23.6.0",
     "ng-packagr": "^4.4.0",
