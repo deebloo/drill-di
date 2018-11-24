@@ -1,10 +1,8 @@
 version: 2.1
 
-executors:
-  prepare_env:
-    docker:
-      - image: circleci/node:10.13.0-jessie-browsers
-    working_directory: ~/project
+commands:
+  prepareEnv:
+    description: 'install and cache deps'
     steps:
       - checkout
       - restore_cache:
@@ -19,13 +17,16 @@ executors:
 
 jobs:
   build:
-    executor: prepare_env
+    docker:
+      - image: circleci/node:10.13.0-jessie-browsers
     steps:
+      - prepareEnv
       - run: npm run build
-
   test:
-    executor: prepare_env
+    docker:
+      - image: circleci/node:10.13.0-jessie-browsers
     steps:
+      - prepareEnv
       - run: npm run test:ci
 
 workflows:
