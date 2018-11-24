@@ -38,6 +38,20 @@ export class Injector {
       return this.providerMap.get(provider);
     }
 
+    const instance = this.create(provider);
+
+    // cache the result in the WeakMap
+    this.providerMap.set(provider, instance);
+
+    return instance;
+  }
+
+  /**
+   * Create a new instance of a provider
+   *
+   * @param provider A provider to create an instance of
+   */
+  create<T>(provider: Provider<T>): T {
     // Check if there is an override defined in the Injector instance
     const override = this.opts.providers
       ? this.opts.providers.find(override => override.provide === provider)
@@ -45,13 +59,8 @@ export class Injector {
 
     const creator = override ? override.provider : provider;
 
-    const instance = creator.deps
+    return creator.deps
       ? new creator(...creator.deps.map(dep => this.get(dep)))
       : new creator();
-
-    // cache the result in the WeakMap
-    this.providerMap.set(provider, instance);
-
-    return instance;
   }
 }

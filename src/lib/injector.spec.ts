@@ -1,164 +1,166 @@
 import { Injector, Provider } from './injector';
 
-test('it should create a new instance of a single provider', () => {
-  class MyService {
-    foo = 'Hello World';
-  }
-
-  const app = new Injector();
-
-  expect(app.get(MyService).foo).toBe('Hello World');
-});
-
-test('it should create a new instance of a provider with a dependency', () => {
-  class BarService {
-    foo = 'Hello World';
-  }
-
-  class FooService {
-    static deps = [BarService];
-
-    constructor(private bar: BarService) {}
-
-    sayHello() {
-      return this.bar.foo;
+describe('Injector', () => {
+  it('should create a new instance of a single provider', () => {
+    class MyService {
+      foo = 'Hello World';
     }
-  }
 
-  const app = new Injector();
+    const app = new Injector();
 
-  expect(app.get(FooService).sayHello()).toBe('Hello World');
-});
+    expect(app.get(MyService).foo).toBe('Hello World');
+  });
 
-test('it should create a new instance of a provider that has a full dep tree', () => {
-  class A {
-    sayHello() {
-      return '|';
+  it('should create a new instance of a provider with a dependency', () => {
+    class BarService {
+      foo = 'Hello World';
     }
-  }
 
-  class B {
-    static deps = [A];
+    class FooService {
+      static deps = [BarService];
 
-    constructor(private a: A) {}
+      constructor(private bar: BarService) {}
 
-    sayHello() {
-      return this.a.sayHello() + '|';
+      sayHello() {
+        return this.bar.foo;
+      }
     }
-  }
 
-  class C {
-    static deps = [A, B];
+    const app = new Injector();
 
-    constructor(private a: A, private b: B) {}
+    expect(app.get(FooService).sayHello()).toBe('Hello World');
+  });
 
-    sayHello() {
-      return this.a.sayHello() + '|' + this.b.sayHello();
+  it('should create a new instance of a provider that has a full dep tree', () => {
+    class A {
+      sayHello() {
+        return '|';
+      }
     }
-  }
 
-  class D {
-    static deps = [A, B, C];
+    class B {
+      static deps = [A];
 
-    constructor(private a: A, private b: B, private c: C) {}
+      constructor(private a: A) {}
 
-    sayHello() {
-      return this.a.sayHello() + '|' + this.b.sayHello() + this.c.sayHello();
+      sayHello() {
+        return this.a.sayHello() + '|';
+      }
     }
-  }
 
-  class E {
-    static deps = [D];
+    class C {
+      static deps = [A, B];
 
-    constructor(private d: D) {}
+      constructor(private a: A, private b: B) {}
 
-    sayHello() {
-      return this.d.sayHello() + '|';
+      sayHello() {
+        return this.a.sayHello() + '|' + this.b.sayHello();
+      }
     }
-  }
 
-  const app = new Injector();
+    class D {
+      static deps = [A, B, C];
 
-  expect(app.get(E).sayHello()).toBe('|||||||||');
-});
+      constructor(private a: A, private b: B, private c: C) {}
 
-test('it should override a provider if explicitly instructed', () => {
-  class BarService {
-    foo = 'Hello World';
-  }
-
-  class FooService {
-    static deps = [BarService];
-
-    constructor(private bar: BarService) {}
-
-    sayHello() {
-      return this.bar.foo;
+      sayHello() {
+        return this.a.sayHello() + '|' + this.b.sayHello() + this.c.sayHello();
+      }
     }
-  }
 
-  expect(new Injector().get(FooService).sayHello()).toBe('Hello World');
+    class E {
+      static deps = [D];
 
-  expect(
-    new Injector({
-      providers: [
-        {
-          provide: BarService,
-          provider: class implements BarService {
-            foo = 'Goodbye World';
+      constructor(private d: D) {}
+
+      sayHello() {
+        return this.d.sayHello() + '|';
+      }
+    }
+
+    const app = new Injector();
+
+    expect(app.get(E).sayHello()).toBe('|||||||||');
+  });
+
+  it('should override a provider if explicitly instructed', () => {
+    class BarService {
+      foo = 'Hello World';
+    }
+
+    class FooService {
+      static deps = [BarService];
+
+      constructor(private bar: BarService) {}
+
+      sayHello() {
+        return this.bar.foo;
+      }
+    }
+
+    expect(new Injector().get(FooService).sayHello()).toBe('Hello World');
+
+    expect(
+      new Injector({
+        providers: [
+          {
+            provide: BarService,
+            provider: class implements BarService {
+              foo = 'Goodbye World';
+            }
           }
-        }
-      ]
-    })
-      .get(FooService)
-      .sayHello()
-  ).toBe('Goodbye World');
-});
+        ]
+      })
+        .get(FooService)
+        .sayHello()
+    ).toBe('Goodbye World');
+  });
 
-test('it immediately initialize specified providers', () => {
-  const initialized: Provider<any>[] = [];
+  it('immediately initialize specified providers', () => {
+    const initialized: Provider<any>[] = [];
 
-  class BarService {
-    constructor() {
-      initialized.push(BarService);
+    class BarService {
+      constructor() {
+        initialized.push(BarService);
+      }
     }
-  }
 
-  class FooService {
-    constructor() {
-      initialized.push(FooService);
+    class FooService {
+      constructor() {
+        initialized.push(FooService);
+      }
     }
-  }
 
-  new Injector({ bootstrap: [FooService, BarService] });
+    new Injector({ bootstrap: [FooService, BarService] });
 
-  expect(initialized).toEqual([FooService, BarService]);
-});
+    expect(initialized).toEqual([FooService, BarService]);
+  });
 
-test('it should return the same instance when called', () => {
-  class BarService {}
+  it('should return the same instance when called', () => {
+    class BarService {}
 
-  class FooService {
-    static deps = [BarService];
+    class FooService {
+      static deps = [BarService];
 
-    constructor(public bar: BarService) {}
-  }
+      constructor(public bar: BarService) {}
+    }
 
-  const app = new Injector();
+    const app = new Injector();
 
-  expect(app.get(FooService).bar).toBe(app.get(BarService));
-});
+    expect(app.get(FooService).bar).toBe(app.get(BarService));
+  });
 
-test('it should return different instances', () => {
-  class BarService {}
+  it('should return different instances', () => {
+    class BarService {}
 
-  class FooService {
-    static deps = [BarService];
+    class FooService {
+      static deps = [BarService];
 
-    constructor(public bar: BarService) {}
-  }
+      constructor(public bar: BarService) {}
+    }
 
-  expect(new Injector().get(FooService).bar).not.toBe(
-    new Injector().get(BarService)
-  );
+    const app = new Injector();
+
+    expect(app.create(FooService)).not.toBe(app.create(FooService));
+  });
 });
