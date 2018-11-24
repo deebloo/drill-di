@@ -4,7 +4,7 @@ jobs:
     docker:
       - image: circleci/node:10.13.0-jessie-browsers
 
-    - steps:
+    steps:
       - checkout
 
       - restore_cache:
