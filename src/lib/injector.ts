@@ -1,6 +1,5 @@
 export interface Provider<T> {
   deps?: Provider<any>[];
-  factory?: (...args: any[]) => T;
 
   new (...args: any[]): T;
 }
