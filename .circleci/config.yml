@@ -1,18 +1,5 @@
 version: 2
 jobs:
-  install_deps:
-    - restore_cache:
-        keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          - v1-dependencies-
-
-    - run: npm install
-
-    - save_cache:
-        paths:
-          - node_modules
-        key: v1s-dependencies-{{ checksum "package.json" }}
-
   build:
     docker:
       - image: circleci/node:10.13.0-jessie-browsers
