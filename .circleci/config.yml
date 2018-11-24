@@ -1,42 +1,34 @@
 version: 2
+commands:
+  prepare_env:
+    description: 'installs and cache deps'
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+
+      - run: npm install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1s-dependencies-{{ checksum "package.json" }}
+
 jobs:
   build:
     docker:
       - image: circleci/node:10.13.0-jessie-browsers
     steps:
-      - checkout
-
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            - v1-dependencies-
-
-      - run: npm install
-
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1s-dependencies-{{ checksum "package.json" }}
-
+      - prepare_env
       - run: npm run build
   test:
     docker:
       - image: circleci/node:10.13.0-jessie-browsers
     steps:
-      - checkout
-
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            - v1-dependencies-
-
-      - run: npm install
-
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1s-dependencies-{{ checksum "package.json" }}
-
+      - prepare_env
       - run: npm run test:ci
 
 workflows:
