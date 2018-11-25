@@ -27,9 +27,9 @@ export function Multi<T = any>(
     provider: class implements MultiProvider<T> {
       static deps = providers;
 
-      providers: any[] = [];
+      providers: T[] = [];
 
-      constructor(...args: any[]) {
+      constructor(...args: T[]) {
         this.providers = args;
       }
     }
