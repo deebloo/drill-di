@@ -170,7 +170,9 @@ describe('Injector', () => {
     class MiddleWare1 {
       test = 'test';
     }
-    class MiddleWare2 {}
+    class MiddleWare2 {
+      foo = 'testing';
+    }
 
     class MyService {
       static deps = [MiddleWareProvider];
@@ -179,7 +181,7 @@ describe('Injector', () => {
     }
 
     const app = new Injector({
-      providers: [Multi(MiddleWareProvider, [MiddleWare1, MiddleWare2])]
+      providers: [Multi<any>(MiddleWareProvider, [MiddleWare1, MiddleWare2])]
     });
 
     expect(app.get(MyService).middleware.providers).toEqual([
