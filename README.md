@@ -5,7 +5,7 @@ Dependency Injection in ~800 bytes
 #### Example:
 
 ```TS
-import { Injector } from 'drill';
+import { Injector } from 'drill-di';
 
 // Write a plain ol JS class
 class FooService {
