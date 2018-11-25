@@ -166,7 +166,10 @@ describe('Injector', () => {
 
   it('should allow a multi providers usage', () => {
     class MiddleWareProvider {}
-    class MiddleWare1 {}
+
+    class MiddleWare1 {
+      test = 'test';
+    }
     class MiddleWare2 {}
 
     class MyService {
