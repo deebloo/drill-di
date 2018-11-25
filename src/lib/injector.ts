@@ -14,6 +14,28 @@ export interface InjectorOptions {
   bootstrap?: Provider<any>[];
 }
 
+export interface MultiProvider<T> {
+  providers: T[];
+}
+
+export function Multi<T = any>(
+  provide: Provider<any>,
+  providers: Provider<T>[]
+): OverrideProvider<any> {
+  return {
+    provide: provide,
+    provider: class implements MultiProvider<T> {
+      static deps = providers;
+
+      providers: any[] = [];
+
+      constructor(...args: any[]) {
+        this.providers = args;
+      }
+    }
+  };
+}
+
 /**
  * @param overrides a list of explicit providers, if you need to override a provider at any point in the tree
  */

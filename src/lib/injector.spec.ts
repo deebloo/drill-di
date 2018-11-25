@@ -1,4 +1,4 @@
-import { Injector, Provider } from './injector';
+import { Injector, Provider, Multi, MultiProvider } from './injector';
 
 describe('Injector', () => {
   it('should create a new instance of a single provider', () => {
@@ -162,5 +162,26 @@ describe('Injector', () => {
     const app = new Injector();
 
     expect(app.create(FooService)).not.toBe(app.create(FooService));
+  });
+
+  it('should allow a multi providers usage', () => {
+    class MiddleWareProvider {}
+    class MiddleWare1 {}
+    class MiddleWare2 {}
+
+    class MyService {
+      static deps = [MiddleWareProvider];
+
+      constructor(public middleware: MultiProvider<any>) {}
+    }
+
+    const app = new Injector({
+      providers: [Multi(MiddleWareProvider, [MiddleWare1, MiddleWare2])]
+    });
+
+    expect(app.get(MyService).middleware.providers).toEqual([
+      new MiddleWare1(),
+      new MiddleWare2()
+    ]);
   });
 });

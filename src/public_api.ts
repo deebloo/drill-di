@@ -1,1 +1,1 @@
-export { Injector, InjectorOptions, Provider } from './lib/injector';
+export { Injector, InjectorOptions, Provider, Multi } from './lib/injector';
