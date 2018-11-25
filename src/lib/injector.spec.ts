@@ -174,19 +174,12 @@ describe('Injector', () => {
       foo = 'testing';
     }
 
-    class MyService {
-      static deps = [MiddleWareProvider];
-
-      constructor(public middleware: MultiProvider<any>) {}
-    }
-
     const app = new Injector({
       providers: [Multi<any>(MiddleWareProvider, [MiddleWare1, MiddleWare2])]
     });
 
-    expect(app.get(MyService).middleware.providers).toEqual([
-      new MiddleWare1(),
-      new MiddleWare2()
-    ]);
+    expect(
+      (app.get<any>(MiddleWareProvider) as MultiProvider<any>).providers
+    ).toEqual([new MiddleWare1(), new MiddleWare2()]);
   });
 });
