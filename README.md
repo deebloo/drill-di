@@ -32,3 +32,38 @@ const app = new Injector();
 // Use that injector to create new instances of objects
 app.get(BarService).sayHello(); // Hello from BarService and Hello from FooService
 ```
+
+#### Multi Providers:
+
+```TS
+import { Injector, Multi } from 'drill-di';
+
+interface MiddleWare {
+  sayHello(): string;
+}
+
+// define a vanilla token
+class MiddleWareToken {}
+
+// write implementations
+class FirstMiddleWare implements MiddleWare {
+  sayHello() {
+    return 'Hello From First';
+  }
+}
+class SecondMiddleWare implements MiddleWare {
+  sayHello() {
+    return 'Hello From Second';
+  }
+}
+
+// create a new instance of our injector
+const app = new Injector({
+  providers: [Multi(MiddleWare, [FirstMiddleWare, SecondMiddleWare])]
+});
+
+// Use that injector to create new instances of objects
+app.get(MiddleWareToken).providers.forEach(instance => {
+  console.log(instance.sayHello());
+});
+```
