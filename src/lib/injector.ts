@@ -42,9 +42,15 @@ export function Multi<T = any>(
 export class Injector {
   private providerMap = new WeakMap<Provider<any>, any>();
 
-  constructor(private opts: InjectorOptions = {}) {
+  constructor(private opts: InjectorOptions = { providers: [] }) {
     if (this.opts.bootstrap) {
       this.opts.bootstrap.forEach(provider => this.get(provider));
+    }
+  }
+
+  addProviders(providers: OverrideProvider<any>[]) {
+    if (this.opts.providers) {
+      this.opts.providers.push(...providers);
     }
   }
 
