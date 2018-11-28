@@ -14,26 +14,12 @@ export interface InjectorOptions {
   bootstrap?: Provider<any>[];
 }
 
-export interface MultiProvider<T> {
-  providers: T[];
-}
+export class MultiProvider<T> {
+  res: T[] = [];
 
-export function Multi<T = any>(
-  provide: Provider<any>,
-  providers: Provider<T>[]
-): OverrideProvider<any> {
-  return {
-    provide: provide,
-    provider: class implements MultiProvider<T> {
-      static deps = providers;
-
-      providers: T[] = [];
-
-      constructor(...args: T[]) {
-        this.providers = args;
-      }
-    }
-  };
+  constructor(...args: T[]) {
+    this.res = args;
+  }
 }
 
 /**

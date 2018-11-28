@@ -1,4 +1,4 @@
-import { Injector, Provider, Multi, MultiProvider } from './injector';
+import { Injector, Provider, MultiProvider } from './injector';
 
 describe('Injector', () => {
   it('should create a new instance of a single provider', () => {
@@ -165,21 +165,32 @@ describe('Injector', () => {
   });
 
   it('should allow a multi providers usage', () => {
-    class MiddleWareProvider {}
+    interface MiddleWare {
+      sayHello(): string;
+    }
+
+    class MiddleWareProvider extends MultiProvider<MiddleWare> {
+      static deps: Provider<MiddleWare>[] = [];
+    }
 
     class MiddleWare1 {
-      test = 'test';
+      sayHello() {
+        return 'Hello World' as string;
+      }
     }
     class MiddleWare2 {
-      foo = 'testing';
+      sayHello() {
+        return 'Hello World' as string;
+      }
     }
 
-    const app = new Injector({
-      providers: [Multi<any>(MiddleWareProvider, [MiddleWare1, MiddleWare2])]
-    });
+    MiddleWareProvider.deps.push(...[MiddleWare1, MiddleWare2]);
 
-    expect(
-      (app.get<any>(MiddleWareProvider) as MultiProvider<any>).providers
-    ).toEqual([new MiddleWare1(), new MiddleWare2()]);
+    const app = new Injector();
+
+    expect(app.get(MiddleWareProvider).res).toEqual([
+      new MiddleWare1(),
+      new MiddleWare2()
+    ]);
   });
 });
