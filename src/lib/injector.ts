@@ -14,14 +14,6 @@ export interface InjectorOptions {
   bootstrap?: Provider<any>[];
 }
 
-export class MultiProvider<T> {
-  res: T[] = [];
-
-  constructor(...args: T[]) {
-    this.res = args;
-  }
-}
-
 /**
  * @param overrides a list of explicit providers, if you need to override a provider at any point in the tree
  */
@@ -31,12 +23,6 @@ export class Injector {
   constructor(private opts: InjectorOptions = { providers: [] }) {
     if (this.opts.bootstrap) {
       this.opts.bootstrap.forEach(provider => this.get(provider));
-    }
-  }
-
-  addProviders(providers: OverrideProvider<any>[]) {
-    if (this.opts.providers) {
-      this.opts.providers.push(...providers);
     }
   }
 
