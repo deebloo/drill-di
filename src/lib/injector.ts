@@ -15,6 +15,9 @@ export interface InjectorOptions {
 }
 
 /**
+ * Create an instance of a Dependency injector.
+ * Can be used to create a singleton of any class that is property annotated with dependencies.
+ *
  * @param overrides a list of explicit providers, if you need to override a provider at any point in the tree
  */
 export class Injector {
