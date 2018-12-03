@@ -161,6 +161,6 @@ describe('Injector', () => {
 
     const app = new Injector();
 
-    expect(app.create(FooService)).not.toBe(app.create(FooService));
+    expect(app.create(FooService)).not.toBe(app.get(FooService));
   });
 });
