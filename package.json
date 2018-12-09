@@ -9,6 +9,7 @@
   },
   "description": "small DI implementation",
   "scripts": {
+    "start": "parcel serve src/demo/index.html",
     "test": "jest --watchAll --verbose=false",
     "test:ci": "jest",
     "build": "ng-packagr -p package.json"
@@ -29,9 +30,14 @@
     "@types/jest": "^23.3.9",
     "jest": "^23.6.0",
     "ng-packagr": "^4.4.0",
+    "parcel": "^1.10.3",
     "prettier": "^1.15.2",
     "ts-jest": "^23.10.4",
     "tsickle": "^0.34.0",
     "typescript": "^3.1.6"
+  },
+  "dependencies": {
+    "lit-html": "^0.14.0",
+    "rxjs": "^6.3.3"
   }
 }
