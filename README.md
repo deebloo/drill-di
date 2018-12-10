@@ -5,7 +5,7 @@ Dependency Injection in ~800 bytes
 #### Example:
 
 ```TS
-import { Injector } from 'drill-di';
+import { Injector, Injectable } from 'drill-di';
 
 // Write a plain ol JS class
 class FooService {
@@ -15,9 +15,10 @@ class FooService {
 }
 
 // Declare that class as a static dependency of another class
+@Injectable({
+  deps: [FooService]
+})
 class BarService {
-  static deps = [FooService];
-
   // and instance of that class will be passed to this one;
   constructor(private foo: FooService) {}
 

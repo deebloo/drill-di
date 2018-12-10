@@ -1,13 +1,4 @@
-export interface Provider<T> {
-  deps?: Provider<any>[];
-
-  new (...args: any[]): T;
-}
-
-export interface OverrideProvider<T> {
-  provide: Provider<T>;
-  provider: Provider<T>;
-}
+import { Provider, OverrideProvider } from './provider';
 
 export interface InjectorOptions {
   providers?: OverrideProvider<any>[];
@@ -23,23 +14,59 @@ export interface InjectorOptions {
 export class Injector {
   private providerMap = new WeakMap<Provider<any>, any>();
 
-  constructor(private opts: InjectorOptions = { providers: [] }) {
+  constructor(
+    private opts: InjectorOptions = { providers: [] },
+    private parent?: Injector
+  ) {
     if (this.opts.bootstrap) {
       this.opts.bootstrap.forEach(provider => this.get(provider));
     }
   }
 
   /**
-   * fetches a singleton instance of a provider
+   * recursively check if a singleton instance is available for a provider
    *
-   * @param provider A provider to create an instance of
+   */
+  has(provider: Provider<any>): boolean {
+    if (!this.parent) {
+      return this.providerMap.has(provider);
+    } else {
+      return this.parent.has(provider);
+    }
+  }
+
+  /**
+   * fetches a singleton instance of a provider
    */
   get<T>(provider: Provider<T>): T {
-    // if provider has already been created return it
     if (this.providerMap.has(provider)) {
+      // if provider has already been created in this scope return it
       return this.providerMap.get(provider);
+    } else {
+      const override = this.findOverride(provider);
+
+      if (override) {
+        // if an override is available for this Injector use that
+        return this.createSingleton(override.provider);
+      } else if (this.parent && this.parent.has(provider)) {
+        // if a parent is available and contains an instance of the provider already use that
+        return this.parent.get(provider);
+      }
     }
 
+    return this.createSingleton(provider);
+  }
+
+  /**
+   * Create a new instance of a provider
+   */
+  create<T>(provider: Provider<T>): T {
+    return provider.deps
+      ? new provider(...provider.deps.map(dep => this.get(dep)))
+      : new provider();
+  }
+
+  private createSingleton(provider: Provider<any>) {
     const instance = this.create(provider);
 
     // cache the result in the WeakMap
@@ -48,21 +75,15 @@ export class Injector {
     return instance;
   }
 
-  /**
-   * Create a new instance of a provider
-   *
-   * @param provider A provider to create an instance of
-   */
-  create<T>(provider: Provider<T>): T {
-    // Check if there is an override defined in the Injector instance
-    const override = this.opts.providers
-      ? this.opts.providers.find(override => override.provide === provider)
-      : null;
+  private findOverride(provider: Provider<any>): OverrideProvider<any> | null {
+    if (this.opts.providers) {
+      const override = this.opts.providers.find(
+        override => override.provide === provider
+      );
 
-    const creator = override ? override.provider : provider;
+      return override || null;
+    }
 
-    return creator.deps
-      ? new creator(...creator.deps.map(dep => this.get(dep)))
-      : new creator();
+    return null;
   }
 }

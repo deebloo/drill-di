@@ -14,7 +14,11 @@
     "noImplicitReturns": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "baseUrl": ".",
+    "paths": {
+      "drill-di": ["./src/public_api.ts"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": [".git", "node_modules"]

@@ -1,1 +1,3 @@
-export { Injector, InjectorOptions, Provider } from './lib/injector';
+export { Injector, InjectorOptions } from './lib/injector';
+export { Provider, OverrideProvider } from './lib/provider';
+export { Injectable, InjectableConfig } from './lib/injectable';
